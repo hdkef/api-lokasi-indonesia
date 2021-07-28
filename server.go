@@ -6,7 +6,12 @@ import (
 	"api-lokasi-indonesia/konstant"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
+
+func init() {
+	_ = godotenv.Load()
+}
 
 func main() {
 

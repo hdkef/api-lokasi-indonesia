@@ -7,8 +7,8 @@ PHP dan sejenisnya.
 # CARA MENGGUNAKAN
 
 ## Mengatur PORT
-PORT dapat diubah dengan mengubah nilai PORT pada file .env
-
+PORT dapat diubah dengan mengubah nilai PORT pada file .env,
+default 8080
 ## Mendapatkan Semua Provinsi
 
     hit end point dengan
@@ -29,7 +29,7 @@ PORT dapat diubah dengan mengubah nilai PORT pada file .env
 
     hit end point dengan
 
-    <q>HOST:PORT/get/city/byid/province/[ID]</q>
+    <quote>HOST:PORT/get/city/byid/province/[ID]</quote>
 
     [ID] adalah nomor ID provinsi
 
@@ -52,7 +52,7 @@ PORT dapat diubah dengan mengubah nilai PORT pada file .env
 
     hit end point dengan
 
-    <q>HOST:PORT/get/city/byname/province/[name]</q>
+    <quote>HOST:PORT/get/city/byname/province/[name]</quote>
 
     [name] adalah nama provinsi
 
