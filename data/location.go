@@ -1,8 +1,10 @@
 package data
 
 import (
+	"api-lokasi-indonesia/models"
 	"encoding/csv"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 
@@ -54,4 +56,31 @@ func UnmarshallDistrict() (*csvutil.Decoder, error) {
 
 func UnmarshallVillage() (*csvutil.Decoder, error) {
 	return unmarshall(VILLAGE)
+}
+
+func readFile(filepath string) ([]byte, error) {
+
+	file, err := ioutil.ReadFile(filepath)
+	if err != nil {
+		fmt.Println(err.Error())
+		return nil, err
+	}
+
+	return file, nil
+}
+
+//Province is saved in memory (see server.go), so no need to unmarshall repeatedly
+func GetProvince() []models.Province {
+
+	csvInput, err := readFile(PROVINCE)
+	if err != nil {
+		panic(err)
+	}
+
+	var province []models.Province
+
+	if err := csvutil.Unmarshal(csvInput, &province); err != nil {
+		panic(err)
+	}
+	return province
 }

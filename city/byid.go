@@ -3,8 +3,10 @@ package city
 import (
 	"api-lokasi-indonesia/data"
 	"api-lokasi-indonesia/models"
+	"api-lokasi-indonesia/utils"
 	"encoding/json"
 	"io"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -15,6 +17,11 @@ type byID struct {
 func (b *byID) FromProvince(value *string, ginctx *gin.Context) {
 
 	dec, err := data.UnmarshallCity()
+
+	if err != nil {
+		utils.ResErr(ginctx, http.StatusInternalServerError, err)
+		return
+	}
 
 	var cities []models.City
 
@@ -37,7 +44,11 @@ func (b *byID) FromProvince(value *string, ginctx *gin.Context) {
 		return
 	}
 
-	respond, _ := json.Marshal(cities)
+	respond, err := json.Marshal(cities)
+	if err != nil {
+		utils.ResErr(ginctx, http.StatusInternalServerError, err)
+		return
+	}
 
 	ginctx.Writer.Write(respond)
 }

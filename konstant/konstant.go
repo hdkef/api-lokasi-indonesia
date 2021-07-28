@@ -22,3 +22,7 @@ var ByWhat = "bywhat"
 func (k *konstant) GetPath() string {
 	return fmt.Sprintf("/%s/:%s/:%s/:%s/:%s", Get, ObjectOne, ByWhat, ObjectTwo, Value)
 }
+
+func (k *konstant) GetAllProvincePath() string {
+	return "/provinces"
+}
