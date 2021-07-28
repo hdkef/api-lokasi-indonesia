@@ -5,6 +5,7 @@ import (
 	"api-lokasi-indonesia/utils"
 	"encoding/csv"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -71,12 +72,71 @@ func unmarshall(filepath string) (*csvutil.Decoder, error) {
 	return dec, nil
 }
 
+func loopingCSVWithFilter(dec *csvutil.Decoder, modelsOf interface{}, filter func(interface{}) (interface{}, bool)) (interface{}, error) {
+
+	var slices []interface{}
+
+	for {
+		var city models.City
+		err := dec.Decode(&city)
+		if err == io.EOF {
+			break
+		} else if err != nil {
+			panic(err.Error())
+		}
+
+		if item, valid := filter(city); valid {
+			slices = append(slices, item)
+		}
+	}
+
+	if len(slices) == 0 {
+		return nil, errors.New("NO DATA")
+	}
+
+	return slices, nil
+}
+
 func UnmarshallProvince() (*csvutil.Decoder, error) {
 	return unmarshall(PROVINCE)
 }
 
-func UnmarshallCity() (*csvutil.Decoder, error) {
-	return unmarshall(CITY)
+func UnmarshallCity(filter func(interface{}) (interface{}, bool)) ([]models.City, error) {
+
+	dec, err := unmarshall(CITY)
+
+	if err != nil {
+		return nil, err
+	}
+
+	cities, err := loopingCSVWithFilter(dec, models.City{}, filter)
+	if err != nil {
+		return nil, err
+	}
+
+	return cities.([]models.City), nil
+
+	// var cities []models.City
+
+	// for {
+	// 	var city models.City
+	// 	err = dec.Decode(&city)
+	// 	if err == io.EOF {
+	// 		break
+	// 	} else if err != nil {
+	// 		panic(err.Error())
+	// 	}
+
+	// 	if correctcity, valid := filter(city); valid {
+	// 		cities = append(cities, correctcity)
+	// 	}
+	// }
+
+	// if len(cities) == 0 {
+	// 	return nil, errors.New("NO DATA")
+	// }
+
+	// return cities, nil
 }
 
 func UnmarshallDistrict() (*csvutil.Decoder, error) {
