@@ -13,7 +13,7 @@ default 8080
 
     hit end point dengan
 
-    <q>HOST:PORT/provinces</q>
+    > HOST:PORT/provinces
 
     Respon yang akan didapat dalam bentuk JSON
     [{
@@ -29,7 +29,7 @@ default 8080
 
     hit end point dengan
 
-    <quote>HOST:PORT/get/city/byid/province/[ID]</quote>
+    > HOST:PORT/get/city/byid/province/[ID]
 
     [ID] adalah nomor ID provinsi
 
@@ -52,7 +52,7 @@ default 8080
 
     hit end point dengan
 
-    <quote>HOST:PORT/get/city/byname/province/[name]</quote>
+    > HOST:PORT/get/city/byname/province/[name]
 
     [name] adalah nama provinsi
 
