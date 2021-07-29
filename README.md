@@ -5,33 +5,36 @@ API ini dibuat untuk memperoleh lokasi di Indonesia, seperti provinsi, kota, kab
 
 # CARA INSTALL
 
-
 ## Dengan cloning
 clone github ini dengan cara
-> git clone github.com/hdkef/api-lokasi-indonesia
+     git clone github.com/hdkef/api-lokasi-indonesia
 
 ubah file .env sesuai yang diinginkan : PORT dan GIN_MODE.
 Port adalah 8080 secara default dan GIN_MODE adalah debug secara default,
 ganti GIN_MODE mejadi release
 
 compile kode golang ke binary dengan cara
-> go build server.go
+     go build server.go
 
 jalankan binary golang
 
-> ./server
+     ./server
 
 ## Dengan docker (Soon)
+
+
+
+
 
 # CARA MENGGUNAKAN
 
 ## Mendapatkan semua provinsi
 
-> HOST:PORT/provinces
+    HOST:PORT/provinces
 
 ## Penjelasan singkat API
 
-> HOST:PORT/get/[objekpertama]/[bywhat]/[objectkedua]/[nilai]
+    HOST:PORT/get/[objekpertama]/[bywhat]/[objectkedua]/[nilai]
 
 objectpertama : merupakan elemen yang ingin dicari (provinsi/kota/kecamatan/kelurahan)
 
@@ -51,7 +54,7 @@ kelurahan ==> village
 
 hit end point dengan
 
-> HOST:PORT/provinces
+    HOST:PORT/provinces
 
 Respon yang akan didapat dalam bentuk JSON
 [{
@@ -67,13 +70,13 @@ seperti berikut
 
 hit end point dengan
 
-> HOST:PORT/get/city/byid/province/[ID]
+    HOST:PORT/get/city/byid/province/[ID]
 
 [ID] adalah nomor ID provinsi
 
 contoh :
 
-HOST:PORT/get/city/byid/province/12
+    HOST:PORT/get/city/byid/province/12
 
 Respon yang akan didapat dalam bentuk JSON
 [{
@@ -90,15 +93,15 @@ seperti berikut
 
 hit end point dengan
 
-> HOST:PORT/get/city/byname/province/[name]
+    HOST:PORT/get/city/byname/province/[name]
 
 [name] adalah nama provinsi
 
 contoh :
 
-HOST:PORT/get/city/byname/province/NUSA TENGGARA BARAT
+    HOST:PORT/get/city/byname/province/NUSA TENGGARA BARAT
 ATAU
-HOST:PORT/get/city/byname/province/NUSA%20TENGGARA%20BARAT
+    HOST:PORT/get/city/byname/province/NUSA%20TENGGARA%20BARAT
 
 Respon yang akan didapat dalam bentuk JSON
 [{
