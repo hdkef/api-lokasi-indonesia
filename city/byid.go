@@ -16,8 +16,11 @@ type byID struct {
 //WARNING!!! value is pointer MUST BE COMPARE WITH DEPOINTER FIRST
 func (b *byID) FromProvince(value *string, ginctx *gin.Context) {
 
+	provinceid := *value
+
+	//get all city by province id
 	cities, err := data.UnmarshallCity(func(c interface{}) (interface{}, bool, bool) {
-		if c.(models.City).ProvinceID == *value {
+		if c.(models.City).ProvinceID == provinceid {
 			return c.(interface{}), true, false
 		}
 		return c.(interface{}), false, false

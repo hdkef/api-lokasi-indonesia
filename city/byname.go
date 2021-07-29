@@ -3,6 +3,7 @@ package city
 import (
 	"api-lokasi-indonesia/data"
 	"api-lokasi-indonesia/models"
+	"api-lokasi-indonesia/province"
 	"api-lokasi-indonesia/utils"
 	"encoding/json"
 	"net/http"
@@ -16,10 +17,12 @@ type byName struct {
 //WARNING!!! value is pointer MUST BE COMPARE WITH DEPOINTER FIRST
 func (b *byName) FromProvince(value *string, ginctx *gin.Context) {
 
-	provinceid := data.GetProvinceIDByName(value)
+	//find province from province name
+	provinceFound := province.GetProvinceByName(value)
 
+	//get all city by province id
 	cities, err := data.UnmarshallCity(func(c interface{}) (interface{}, bool, bool) {
-		if c.(models.City).ProvinceID == provinceid {
+		if c.(models.City).ProvinceID == provinceFound.ID {
 			return c.(interface{}), true, false
 		}
 		return c.(interface{}), false, false

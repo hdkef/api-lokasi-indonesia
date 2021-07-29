@@ -3,39 +3,14 @@ package data
 import (
 	"api-lokasi-indonesia/konstant"
 	"api-lokasi-indonesia/models"
-	"api-lokasi-indonesia/utils"
 	"encoding/csv"
-	"encoding/json"
 	"errors"
 	"fmt"
-	"net/http"
 	"os"
 	"path/filepath"
 
-	"github.com/gin-gonic/gin"
 	"github.com/jszwec/csvutil"
 )
-
-var _province []models.Province
-var _provinceNameKeyMap map[string]string = make(map[string]string)
-var _provinceIDKeyMap map[string]string = make(map[string]string)
-
-func init() {
-	initProvince()
-}
-
-//Endpoint for get all provinces
-func GetAllProvince() gin.HandlerFunc {
-	return func(ginctx *gin.Context) {
-		respond, err := json.Marshal(_province)
-		if err != nil {
-			utils.ResErr(ginctx, http.StatusInternalServerError, err)
-			return
-		}
-
-		ginctx.Writer.Write(respond)
-	}
-}
 
 func csvPath(fname string) string {
 	return filepath.Join("data", fname)
@@ -134,25 +109,4 @@ func UnmarshallVillage(filter func(interface{}) (interface{}, bool, bool)) ([]mo
 	}
 
 	return result.([]models.Village), nil
-}
-
-//initProvince is to unmarshall all provinces and saved those in memory,
-//there are variable containes slices of all provinces, map with province name key and province id value and map with vice versa
-func initProvince() {
-
-	provinces, err := UnmarshallProvince(func(i interface{}) (interface{}, bool, bool) {
-		province := i.(models.Province)
-		_provinceNameKeyMap[province.Name] = province.ID
-		_provinceIDKeyMap[province.ID] = province.Name
-		return i, true, false
-	})
-
-	if err != nil {
-		panic(err)
-	}
-	_province = provinces
-}
-
-func GetProvinceIDByName(name *string) string {
-	return _provinceNameKeyMap[*name]
 }
