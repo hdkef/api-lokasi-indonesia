@@ -1,14 +1,13 @@
 package data
 
 import (
+	"api-lokasi-indonesia/konstant"
 	"api-lokasi-indonesia/models"
 	"api-lokasi-indonesia/utils"
 	"encoding/csv"
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
-	"io/ioutil"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -17,17 +16,18 @@ import (
 	"github.com/jszwec/csvutil"
 )
 
-var province []models.Province
-var provinceNameKeyMap map[string]string = make(map[string]string)
-var provinceIDKeyMap map[string]string = make(map[string]string)
+var _province []models.Province
+var _provinceNameKeyMap map[string]string = make(map[string]string)
+var _provinceIDKeyMap map[string]string = make(map[string]string)
 
 func init() {
-	province, provinceNameKeyMap, provinceIDKeyMap = getProvince()
+	initProvince()
 }
 
+//Endpoint for get all provinces
 func GetAllProvince() gin.HandlerFunc {
 	return func(ginctx *gin.Context) {
-		respond, err := json.Marshal(province)
+		respond, err := json.Marshal(_province)
 		if err != nil {
 			utils.ResErr(ginctx, http.StatusInternalServerError, err)
 			return
@@ -54,7 +54,7 @@ func openFile(filepath string) (*os.File, error) {
 	return file, nil
 }
 
-func unmarshall(filepath string) (*csvutil.Decoder, error) {
+func unmarshall(unitType string, filepath string, filter func(interface{}) (interface{}, bool, bool)) (interface{}, error) {
 	file, err := openFile(filepath)
 	if err != nil {
 		fmt.Println(err.Error())
@@ -69,125 +69,90 @@ func unmarshall(filepath string) (*csvutil.Decoder, error) {
 		fmt.Println(err.Error())
 		return nil, err
 	}
-	return dec, nil
+
+	result, err := loopingCSVWithFilter(unitType, dec, filter)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
 }
 
-func loopingCSVWithFilter(dec *csvutil.Decoder, modelsOf interface{}, filter func(interface{}) (interface{}, bool)) (interface{}, error) {
+//will match the loop csv handle with unit type BECAUSE GOLANG HAS NO GENERIC AND IT SUCKS
+func loopingCSVWithFilter(unitType string, dec *csvutil.Decoder, filter func(interface{}) (interface{}, bool, bool)) (interface{}, error) {
 
-	var slices []interface{}
-
-	for {
-		var city models.City
-		err := dec.Decode(&city)
-		if err == io.EOF {
-			break
-		} else if err != nil {
-			panic(err.Error())
-		}
-
-		if item, valid := filter(city); valid {
-			slices = append(slices, item)
-		}
+	switch unitType {
+	case konstant.Province:
+		return doLoopingProvince(dec, filter)
+	case konstant.City:
+		return doLoopingCity(dec, filter)
+	case konstant.District:
+		return doLoopingDistrict(dec, filter)
+	case konstant.Village:
+		return doLoopingVillage(dec, filter)
+	default:
+		return nil, errors.New("NO matching unit type")
 	}
 
-	if len(slices) == 0 {
-		return nil, errors.New("NO DATA")
+}
+
+func UnmarshallProvince(filter func(interface{}) (interface{}, bool, bool)) ([]models.Province, error) {
+	result, err := unmarshall(konstant.Province, PROVINCE, filter)
+	if err != nil {
+		return nil, err
 	}
-
-	return slices, nil
+	return result.([]models.Province), nil
 }
 
-func UnmarshallProvince() (*csvutil.Decoder, error) {
-	return unmarshall(PROVINCE)
-}
+func UnmarshallCity(filter func(interface{}) (interface{}, bool, bool)) ([]models.City, error) {
 
-func UnmarshallCity(filter func(interface{}) (interface{}, bool)) ([]models.City, error) {
-
-	dec, err := unmarshall(CITY)
+	result, err := unmarshall(konstant.City, CITY, filter)
 
 	if err != nil {
 		return nil, err
 	}
 
-	cities, err := loopingCSVWithFilter(dec, models.City{}, filter)
+	return result.([]models.City), nil
+}
+
+func UnmarshallDistrict(filter func(interface{}) (interface{}, bool, bool)) ([]models.District, error) {
+
+	result, err := unmarshall(konstant.District, DISTRICT, filter)
+
 	if err != nil {
 		return nil, err
 	}
 
-	return cities.([]models.City), nil
-
-	// var cities []models.City
-
-	// for {
-	// 	var city models.City
-	// 	err = dec.Decode(&city)
-	// 	if err == io.EOF {
-	// 		break
-	// 	} else if err != nil {
-	// 		panic(err.Error())
-	// 	}
-
-	// 	if correctcity, valid := filter(city); valid {
-	// 		cities = append(cities, correctcity)
-	// 	}
-	// }
-
-	// if len(cities) == 0 {
-	// 	return nil, errors.New("NO DATA")
-	// }
-
-	// return cities, nil
+	return result.([]models.District), nil
 }
 
-func UnmarshallDistrict() (*csvutil.Decoder, error) {
-	return unmarshall(DISTRICT)
-}
+func UnmarshallVillage(filter func(interface{}) (interface{}, bool, bool)) ([]models.Village, error) {
 
-func UnmarshallVillage() (*csvutil.Decoder, error) {
-	return unmarshall(VILLAGE)
-}
+	result, err := unmarshall(konstant.Village, VILLAGE, filter)
 
-func readFile(filepath string) ([]byte, error) {
-
-	file, err := ioutil.ReadFile(filepath)
 	if err != nil {
-		fmt.Println(err.Error())
 		return nil, err
 	}
 
-	return file, nil
+	return result.([]models.Village), nil
 }
 
-//Province is saved in memory (see above at init()), so no need to unmarshall repeatedly
-//this func return all provinces in slice, map with key is province name and value is provinceid, and map with key is province id and value is provincename
-func getProvince() ([]models.Province, map[string]string, map[string]string) {
+//initProvince is to unmarshall all provinces and saved those in memory,
+//there are variable containes slices of all provinces, map with province name key and province id value and map with vice versa
+func initProvince() {
 
-	dec, err := UnmarshallProvince()
+	provinces, err := UnmarshallProvince(func(i interface{}) (interface{}, bool, bool) {
+		province := i.(models.Province)
+		_provinceNameKeyMap[province.Name] = province.ID
+		_provinceIDKeyMap[province.ID] = province.Name
+		return i, true, false
+	})
 
 	if err != nil {
 		panic(err)
 	}
-
-	var provinces []models.Province
-	var provinceNameKeyMap map[string]string = make(map[string]string)
-
-	for {
-		var province models.Province
-		err = dec.Decode(&province)
-		if err == io.EOF {
-			break
-		} else if err != nil {
-			panic(err.Error())
-		}
-
-		provinces = append(provinces, province)
-		provinceNameKeyMap[province.Name] = province.ID
-		provinceIDKeyMap[province.ID] = province.Name
-	}
-
-	return provinces, provinceNameKeyMap, provinceIDKeyMap
+	_province = provinces
 }
 
 func GetProvinceIDByName(name *string) string {
-	return provinceNameKeyMap[*name]
+	return _provinceNameKeyMap[*name]
 }

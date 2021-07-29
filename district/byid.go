@@ -1,4 +1,4 @@
-package city
+package district
 
 import (
 	"api-lokasi-indonesia/data"
@@ -14,10 +14,9 @@ type byID struct {
 }
 
 //WARNING!!! value is pointer MUST BE COMPARE WITH DEPOINTER FIRST
-func (b *byID) FromProvince(value *string, ginctx *gin.Context) {
-
-	cities, err := data.UnmarshallCity(func(c interface{}) (interface{}, bool, bool) {
-		if c.(models.City).ProvinceID == *value {
+func (b *byID) FromCity(value *string, ginctx *gin.Context) {
+	districts, err := data.UnmarshallDistrict(func(c interface{}) (interface{}, bool, bool) {
+		if c.(models.District).CityID == *value {
 			return c.(interface{}), true, false
 		}
 		return c.(interface{}), false, false
@@ -27,7 +26,7 @@ func (b *byID) FromProvince(value *string, ginctx *gin.Context) {
 		return
 	}
 
-	respond, err := json.Marshal(cities)
+	respond, err := json.Marshal(districts)
 	if err != nil {
 		utils.ResErr(ginctx, http.StatusInternalServerError, err)
 		return
