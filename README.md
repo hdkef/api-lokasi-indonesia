@@ -45,10 +45,10 @@ ingin mendapatkan kota yang didapat dari nama provinsi ACEH, maka menjadi /bynam
 
 ## Objek
 
-*provinsi ==> province
-*kota / kabupaten ==> city
-*kecamatan ==> district
-*kelurahan ==> village
+provinsi ==> province
+kota / kabupaten ==> city
+kecamatan ==> district
+kelurahan ==> village
 
 ## Mendapatkan Semua Provinsi
 
