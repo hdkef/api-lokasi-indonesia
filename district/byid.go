@@ -40,6 +40,7 @@ func (b *byID) FromCity(value *string, ginctx *gin.Context) {
 }
 
 //WARNING!! THIS OPERATION TAKES O^n time complexity
+//WARNING!!! value is pointer MUST BE COMPARE WITH DEPOINTER FIRST
 func (b *byID) FromProvince(value *string, ginctx *gin.Context) {
 
 	var alldistricts []models.District

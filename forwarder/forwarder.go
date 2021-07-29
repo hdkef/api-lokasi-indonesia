@@ -20,12 +20,21 @@ var allhandler map[string]func(value *string, ginctx *gin.Context) = make(map[st
 func fillHandlerMap() {
 	allhandler[fmt.Sprintf("%s%s%s", konstant.Province, konstant.ByID, konstant.Province)] = province.GetProvinceByIDHandler
 	allhandler[fmt.Sprintf("%s%s%s", konstant.Province, konstant.ByName, konstant.Province)] = province.GetProvinceByNameHandler
+
 	allhandler[fmt.Sprintf("%s%s%s", konstant.City, konstant.ByID, konstant.Province)] = cityhandler.ByID.FromProvince
 	allhandler[fmt.Sprintf("%s%s%s", konstant.City, konstant.ByName, konstant.Province)] = cityhandler.ByName.FromProvince
+
 	allhandler[fmt.Sprintf("%s%s%s", konstant.District, konstant.ByID, konstant.City)] = districthandler.ByID.FromCity
 	allhandler[fmt.Sprintf("%s%s%s", konstant.District, konstant.ByID, konstant.Province)] = districthandler.ByID.FromProvince
 	allhandler[fmt.Sprintf("%s%s%s", konstant.District, konstant.ByName, konstant.City)] = districthandler.ByName.FromCity
 	allhandler[fmt.Sprintf("%s%s%s", konstant.District, konstant.ByName, konstant.Province)] = districthandler.ByName.FromProvince
+
+	allhandler[fmt.Sprintf("%s%s%s", konstant.Village, konstant.ByID, konstant.District)] = villagehandler.ByID.FromDistrict
+	allhandler[fmt.Sprintf("%s%s%s", konstant.Village, konstant.ByID, konstant.City)] = villagehandler.ByID.FromCity
+	allhandler[fmt.Sprintf("%s%s%s", konstant.Village, konstant.ByID, konstant.Province)] = villagehandler.ByID.FromProvince
+	allhandler[fmt.Sprintf("%s%s%s", konstant.Village, konstant.ByName, konstant.District)] = villagehandler.ByName.FromDistrict
+	allhandler[fmt.Sprintf("%s%s%s", konstant.Village, konstant.ByName, konstant.City)] = villagehandler.ByName.FromCity
+	allhandler[fmt.Sprintf("%s%s%s", konstant.Village, konstant.ByName, konstant.Province)] = villagehandler.ByName.FromProvince
 }
 
 func init() {
