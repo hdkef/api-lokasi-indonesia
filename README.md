@@ -7,7 +7,7 @@ API ini dibuat untuk memperoleh lokasi di Indonesia, seperti provinsi, kota, kab
 
 ## Dengan cloning
 clone github ini dengan cara
-     git clone github.com/hdkef/api-lokasi-indonesia
+    git clone github.com/hdkef/api-lokasi-indonesia
 
 ubah file .env sesuai yang diinginkan : PORT dan GIN_MODE.
 Port adalah 8080 secara default dan GIN_MODE adalah debug secara default,
@@ -45,10 +45,10 @@ ingin mendapatkan kota yang didapat dari nama provinsi ACEH, maka menjadi /bynam
 
 ## Objek
 
-provinsi ==> province
-kota / kabupaten ==> city
-kecamatan ==> district
-kelurahan ==> village
+*provinsi ==> province
+*kota / kabupaten ==> city
+*kecamatan ==> district
+*kelurahan ==> village
 
 ## Mendapatkan Semua Provinsi
 
