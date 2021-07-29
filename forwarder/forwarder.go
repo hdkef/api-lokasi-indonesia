@@ -21,14 +21,20 @@ func fillHandlerMap() {
 	allhandler[fmt.Sprintf("%s%s%s", konstant.Province, konstant.ByID, konstant.Province)] = province.GetProvinceByIDHandler
 	allhandler[fmt.Sprintf("%s%s%s", konstant.Province, konstant.ByName, konstant.Province)] = province.GetProvinceByNameHandler
 
+	allhandler[fmt.Sprintf("%s%s%s", konstant.City, konstant.ByID, konstant.City)] = city.GetCityByIDHandler
+	allhandler[fmt.Sprintf("%s%s%s", konstant.City, konstant.ByName, konstant.City)] = city.GetCityByNameHandler
 	allhandler[fmt.Sprintf("%s%s%s", konstant.City, konstant.ByID, konstant.Province)] = cityhandler.ByID.FromProvince
 	allhandler[fmt.Sprintf("%s%s%s", konstant.City, konstant.ByName, konstant.Province)] = cityhandler.ByName.FromProvince
 
+	allhandler[fmt.Sprintf("%s%s%s", konstant.District, konstant.ByID, konstant.District)] = district.GetDistrictByIDHandler
+	allhandler[fmt.Sprintf("%s%s%s", konstant.District, konstant.ByName, konstant.District)] = district.GetDistrictByNameHandler
 	allhandler[fmt.Sprintf("%s%s%s", konstant.District, konstant.ByID, konstant.City)] = districthandler.ByID.FromCity
 	allhandler[fmt.Sprintf("%s%s%s", konstant.District, konstant.ByID, konstant.Province)] = districthandler.ByID.FromProvince
 	allhandler[fmt.Sprintf("%s%s%s", konstant.District, konstant.ByName, konstant.City)] = districthandler.ByName.FromCity
 	allhandler[fmt.Sprintf("%s%s%s", konstant.District, konstant.ByName, konstant.Province)] = districthandler.ByName.FromProvince
 
+	allhandler[fmt.Sprintf("%s%s%s", konstant.Village, konstant.ByID, konstant.Village)] = village.GetVillageByIDHandler
+	allhandler[fmt.Sprintf("%s%s%s", konstant.Village, konstant.ByName, konstant.Village)] = village.GetVillageByNameHandler
 	allhandler[fmt.Sprintf("%s%s%s", konstant.Village, konstant.ByID, konstant.District)] = villagehandler.ByID.FromDistrict
 	allhandler[fmt.Sprintf("%s%s%s", konstant.Village, konstant.ByID, konstant.City)] = villagehandler.ByID.FromCity
 	allhandler[fmt.Sprintf("%s%s%s", konstant.Village, konstant.ByID, konstant.Province)] = villagehandler.ByID.FromProvince
