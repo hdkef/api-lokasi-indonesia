@@ -43,6 +43,12 @@ bywhat : merupakan jenis filter, dapat filter menggunakan ID dengan byid atau me
 objectkedua : merupakan elemen untuk difilter dari (provinsi/kota/kecamatan/kelurahan). misalnya
 ingin mendapatkan kota yang didapat dari nama provinsi ACEH, maka menjadi /byname/ACEH
 
+nilai : merupakan nilai dari ID atau nama dari objectkedua.
+
+PERHATIAN!
+
+untuk bywhat == byname maka nilai harus HURUF KAPITAL dan DIPISAH DENGAN SPASI atau %20
+
 ## Objek
 
 provinsi ==> province
@@ -103,7 +109,9 @@ hit end point dengan
 contoh :
 
     HOST:PORT/get/city/byname/province/NUSA TENGGARA BARAT
+
 ATAU
+
     HOST:PORT/get/city/byname/province/NUSA%20TENGGARA%20BARAT
 
 Respon yang akan didapat dalam bentuk JSON
