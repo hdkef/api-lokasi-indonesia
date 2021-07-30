@@ -20,21 +20,27 @@ var PROVINCE = csvPath("provinces.csv")
 var DISTRICT = csvPath("districts.csv")
 var CITY = csvPath("cities.csv")
 var VILLAGE = csvPath("villages.csv")
+var PROVINCEFILE *os.File
+var DISTRICTFILE *os.File
+var CITYFILE *os.File
+var VILLAGEFILE *os.File
 
-func openFile(filepath string) (*os.File, error) {
-	file, err := os.Open(filepath)
-	if err != nil {
-		return nil, err
-	}
-	return file, nil
+func init() {
+	PROVINCEFILE = openFile(PROVINCE)
+	DISTRICTFILE = openFile(DISTRICT)
+	CITYFILE = openFile(CITY)
+	VILLAGEFILE = openFile(VILLAGE)
 }
 
-func unmarshall(unitType string, filepath string, filter func(interface{}) (interface{}, bool, bool)) (interface{}, error) {
-	file, err := openFile(filepath)
+func openFile(filepath string) *os.File {
+	file, err := os.Open(filepath)
 	if err != nil {
-		fmt.Println(err.Error())
-		return nil, err
+		panic(err)
 	}
+	return file
+}
+
+func unmarshall(file *os.File, unitType string, filepath string, filter func(interface{}) (interface{}, bool, bool)) (interface{}, error) {
 
 	csvReader := csv.NewReader(file)
 	csvReader.Comma = ','
@@ -71,7 +77,7 @@ func loopingCSVWithFilter(unitType string, dec *csvutil.Decoder, filter func(int
 }
 
 func UnmarshallProvince(filter func(interface{}) (interface{}, bool, bool)) ([]models.Province, error) {
-	result, err := unmarshall(konstant.Province, PROVINCE, filter)
+	result, err := unmarshall(PROVINCEFILE, konstant.Province, PROVINCE, filter)
 	if err != nil {
 		return nil, err
 	}
@@ -80,7 +86,7 @@ func UnmarshallProvince(filter func(interface{}) (interface{}, bool, bool)) ([]m
 
 func UnmarshallCity(filter func(interface{}) (interface{}, bool, bool)) ([]models.City, error) {
 
-	result, err := unmarshall(konstant.City, CITY, filter)
+	result, err := unmarshall(CITYFILE, konstant.City, CITY, filter)
 
 	if err != nil {
 		return nil, err
@@ -91,7 +97,7 @@ func UnmarshallCity(filter func(interface{}) (interface{}, bool, bool)) ([]model
 
 func UnmarshallDistrict(filter func(interface{}) (interface{}, bool, bool)) ([]models.District, error) {
 
-	result, err := unmarshall(konstant.District, DISTRICT, filter)
+	result, err := unmarshall(DISTRICTFILE, konstant.District, DISTRICT, filter)
 
 	if err != nil {
 		return nil, err
@@ -102,7 +108,7 @@ func UnmarshallDistrict(filter func(interface{}) (interface{}, bool, bool)) ([]m
 
 func UnmarshallVillage(filter func(interface{}) (interface{}, bool, bool)) ([]models.Village, error) {
 
-	result, err := unmarshall(konstant.Village, VILLAGE, filter)
+	result, err := unmarshall(VILLAGEFILE, konstant.Village, VILLAGE, filter)
 
 	if err != nil {
 		return nil, err
