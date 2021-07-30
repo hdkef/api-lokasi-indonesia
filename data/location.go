@@ -40,7 +40,7 @@ func openFile(filepath string) *os.File {
 	return file
 }
 
-func unmarshall(file *os.File, unitType string, filepath string, filter func(interface{}) (interface{}, bool, bool)) (interface{}, error) {
+func unmarshall(file *os.File, unitType string, filter func(interface{}) (interface{}, bool, bool)) (interface{}, error) {
 
 	csvReader := csv.NewReader(file)
 	csvReader.Comma = ','
@@ -77,7 +77,7 @@ func loopingCSVWithFilter(unitType string, dec *csvutil.Decoder, filter func(int
 }
 
 func UnmarshallProvince(filter func(interface{}) (interface{}, bool, bool)) ([]models.Province, error) {
-	result, err := unmarshall(PROVINCEFILE, konstant.Province, PROVINCE, filter)
+	result, err := unmarshall(PROVINCEFILE, konstant.Province, filter)
 	if err != nil {
 		return nil, err
 	}
@@ -86,7 +86,7 @@ func UnmarshallProvince(filter func(interface{}) (interface{}, bool, bool)) ([]m
 
 func UnmarshallCity(filter func(interface{}) (interface{}, bool, bool)) ([]models.City, error) {
 
-	result, err := unmarshall(CITYFILE, konstant.City, CITY, filter)
+	result, err := unmarshall(CITYFILE, konstant.City, filter)
 
 	if err != nil {
 		return nil, err
@@ -97,7 +97,7 @@ func UnmarshallCity(filter func(interface{}) (interface{}, bool, bool)) ([]model
 
 func UnmarshallDistrict(filter func(interface{}) (interface{}, bool, bool)) ([]models.District, error) {
 
-	result, err := unmarshall(DISTRICTFILE, konstant.District, DISTRICT, filter)
+	result, err := unmarshall(DISTRICTFILE, konstant.District, filter)
 
 	if err != nil {
 		return nil, err
@@ -108,7 +108,7 @@ func UnmarshallDistrict(filter func(interface{}) (interface{}, bool, bool)) ([]m
 
 func UnmarshallVillage(filter func(interface{}) (interface{}, bool, bool)) ([]models.Village, error) {
 
-	result, err := unmarshall(VILLAGEFILE, konstant.Village, VILLAGE, filter)
+	result, err := unmarshall(VILLAGEFILE, konstant.Village, filter)
 
 	if err != nil {
 		return nil, err
