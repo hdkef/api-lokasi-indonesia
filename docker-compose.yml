@@ -1,0 +1,11 @@
+version: "3.8"
+
+services:
+    api-lokasi-indonesia:
+        build: .
+        container_name: api-lokasi-indonesia
+        environment:
+            - PORT=8080
+            - GIN_MODE=release
+        ports:
+            - 8080:8080

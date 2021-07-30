@@ -22,5 +22,8 @@ func main() {
 	r.GET(k.GetPath(), forwarder.Forward()) //this route path will be forwarded by forwarder
 	r.GET(k.GetAllProvincePath(), province.GetAllProvince())
 
-	r.Run()
+	err := r.Run()
+	if err != nil {
+		panic(err)
+	}
 }

@@ -22,7 +22,11 @@ jalankan binary golang
 
 ## Dengan docker (Soon)
 
+jalankan perintah berikut di terminal
 
+    docker run -d -p 1010:8080 --name api-lokasi-indonesia 081218068401/api-lokasi-indonesia
+
+aplikasi akan berjalan pada localhost:1010 dengan nama container api-lokasi-indonesia
 
 
 
@@ -31,6 +35,10 @@ jalankan binary golang
 ## Mendapatkan semua provinsi
 
     HOST:PORT/provinces
+
+response seperti :
+
+
 
 ## Penjelasan singkat API
 
