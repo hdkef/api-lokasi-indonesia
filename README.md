@@ -14,7 +14,8 @@ Port adalah 8080 secara default dan GIN_MODE adalah debug secara default,
 ganti GIN_MODE mejadi release
 
 compile kode golang ke binary dengan cara
-     go build server.go
+
+    go build server.go
 
 jalankan binary golang
 
