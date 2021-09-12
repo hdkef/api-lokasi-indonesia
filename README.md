@@ -3,6 +3,9 @@
 # API LOKASI INDONESIA
 API ini dibuat untuk memperoleh lokasi di Indonesia, seperti provinsi, kota, kabupaten, dan kelurahan. API ini ditulis dalam bahasa Golang yang menyebabkan respon time menjadi cukup cepat.
 
+## Untuk Dilakukan
+Merombak resource naming menjadi berpedoman kepada  truly REST API.
+
 # CARA INSTALL
 
 ## Dengan cloning
